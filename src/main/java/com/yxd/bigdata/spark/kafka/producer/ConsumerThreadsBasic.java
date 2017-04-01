@@ -15,11 +15,9 @@ public class ConsumerThreadsBasic {
         String togicName = "yxdkafka0";
         Integer threadNum = 1;
 
-        //调用生产�?
         ConsumerByThreads cbt = new ConsumerByThreads(togicName,threadNum);
 
         cbt.run();
-        //时间长点 30秒钟Long.MAX_VALUE
         try {
             Thread.sleep(1000*60*3);
         } catch (InterruptedException e) {
@@ -27,7 +25,6 @@ public class ConsumerThreadsBasic {
         }
 
         isRunning.set(false);
-        // 关闭连接
         cbt.closeProducer();
     }
 }
