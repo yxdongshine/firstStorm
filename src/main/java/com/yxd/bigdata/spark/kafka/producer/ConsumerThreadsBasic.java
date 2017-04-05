@@ -13,7 +13,7 @@ public class ConsumerThreadsBasic {
     public static void main(String[] args) {
 
         String togicName = "yxdkafka0";
-        Integer threadNum = 3;
+        Integer threadNum = 1;
 
         ConsumerByThreads cbt = new ConsumerByThreads(togicName,threadNum);
 
