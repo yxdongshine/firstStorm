@@ -85,7 +85,7 @@ public class WordCountTopolopy {
         //дhbase
         SimpleHBaseMapper mapper = new SimpleHBaseMapper();
         mapper.withColumnFamily(cf_storm);
-        mapper.withColumnFields(new Fields("count","word"));
+        mapper.withColumnFields(new Fields("count"));
         mapper.withRowKeyField("word");
 
         //Random random = new Random(100000000000L);
