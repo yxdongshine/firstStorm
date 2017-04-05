@@ -13,13 +13,13 @@ public class ConsumerThreadsBasic {
     public static void main(String[] args) {
 
         String togicName = "yxdkafka0";
-        Integer threadNum = 1;
+        Integer threadNum = 3;
 
         ConsumerByThreads cbt = new ConsumerByThreads(togicName,threadNum);
 
         cbt.run();
         try {
-            Thread.sleep(1000*60*3);
+            Thread.sleep(1000*60*60*24*1);
         } catch (InterruptedException e) {
 
         }

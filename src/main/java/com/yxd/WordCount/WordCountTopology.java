@@ -20,10 +20,10 @@ public class WordCountTopology {
 	private static final String SPOUT_ID = "spoutID";
 	private static final String SPLIT_BOLT = "splitID";
 	public static void main(String[] args) {
-		// 1.构造topology builder 
+		// 1.构造topology builder
 		TopologyBuilder tb = new TopologyBuilder();
 		// 2.指定spout组件
-		
+
 		// 使用storm提供的kafkaSpout组件去完成
 		// (BrokerHosts hosts|生产者的主机地址, String topic|topic名称, String zkRoot|topic路径, String id|唯一的ID)
 		BrokerHosts hosts = new ZkHosts("hadoop1:2181/kafka");
@@ -38,7 +38,7 @@ public class WordCountTopology {
 		// 思考:回去之后将这行注释掉 测试默认是什么数据格式来解析kafka的数据
 		KafkaSpout kafkaSpout = new KafkaSpout(spoutConf);
 		tb.setSpout(SPOUT_ID, kafkaSpout);
-		
+
 		// 指定splitBolt组件  字符串分割逻辑功能的bolt
 		tb.setBolt(SPLIT_BOLT, new SplitBolt()).shuffleGrouping(SPOUT_ID);
 		// 数据流分组的3种方式
@@ -46,13 +46,13 @@ public class WordCountTopology {
 		 * .shuffleGrouping(SPOUT_ID);  随机分组
 		 * .fieldsGrouping(componentId, fields);  按（字段）key分组
 		 * .globalGrouping(componentId);  全局分组（只分到一组中）
-		 * 
+		 *
 		 */
-		
-		
-		
-		
-		
+
+
+
+
+
 		/*
 		 * 本地测试模式
 		 */
@@ -61,11 +61,11 @@ public class WordCountTopology {
 		config.put("myK", "myV");
 		// arg0|topology名字, arg1|是向后发送的参数, arg2|topology实例
 		localCluster.submitTopology("wordCountTopo", config, tb.createTopology());
-		
-		
-		
-		
-		
+
+
+
+
+
 
 	}
 

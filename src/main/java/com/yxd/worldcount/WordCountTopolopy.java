@@ -28,7 +28,8 @@ public class WordCountTopolopy {
     static String nameSpace = "storm";
     static String create = "yxd";
     static String cf_storm = "stormcf";
-    private static final byte[] first_storm_content = Bytes.toBytes("storm:first_storm_content");
+    static String table_name = "storm:first_storm_content" ;
+    private static final byte[] first_storm_content = Bytes.toBytes(table_name);
 
     public static void main(String[] args) {
 
@@ -70,19 +71,21 @@ public class WordCountTopolopy {
 		 */
 
         //设置countBolt
-        tb.setBolt("count", new DeselfCountBolt()).fieldsGrouping("wcSpiltbolt", new Fields("word"));
+        tb.setBolt("countBolt", new DeselfCountBolt()).fieldsGrouping("wcSpiltbolt", new Fields("word"));
 
 
 
         //创建hbase
         hbc.initNameSpace(nameSpace,create);
-        hbc.initTable(first_storm_content,cf_storm);
+        System.out.println("========nameSpace created=======");
+        hbc.initTable(first_storm_content, cf_storm);
+        System.out.println("========initTable created=======");
 
 
         //写hbase
         SimpleHBaseMapper mapper = new SimpleHBaseMapper();
         mapper.withColumnFamily(cf_storm);
-        mapper.withColumnFields(new Fields("count"));
+        mapper.withColumnFields(new Fields("count","word"));
         mapper.withRowKeyField("word");
 
         //Random random = new Random(100000000000L);
@@ -94,8 +97,9 @@ public class WordCountTopolopy {
         map.put("hbase.zookeeper.quorum", "hadoop1");
 
         // hbase-bolt
-        HBaseBolt hBaseBolt = new HBaseBolt("wordcount", mapper).withConfigKey("hbase.conf");
-        tb.setBolt("hbase", hBaseBolt).shuffleGrouping("count");
+        HBaseBolt hBaseBolt = new HBaseBolt(table_name, mapper).withConfigKey("hbase.conf");
+
+        tb.setBolt("hbaseId", hBaseBolt).shuffleGrouping("countBolt");
 
         Config conf = new Config();
         conf.setDebug(true);
@@ -120,11 +124,8 @@ public class WordCountTopolopy {
 		 * 本地测试模式
 		 */
             LocalCluster localCluster = new LocalCluster();
-            //向后面的bolt发送key-val对
-            Config config = new Config();
-            config.put("yxdK", "yxdV");
             // arg0|topology名字, arg1|是向后发送的参数, arg2|topology实例
-            localCluster.submitTopology("wcTopology",config,tb.createTopology());
+            localCluster.submitTopology("wcTopology",conf,tb.createTopology());
         }
 
 

@@ -225,21 +225,30 @@ public class HbaseClient {
 			HTableDescriptor desc = new HTableDescriptor(TableName.valueOf(tableName));
 			HColumnDescriptor family = new HColumnDescriptor(Bytes.toBytes(cfName));
 			// 开启列簇 -- store的块缓存
-			family.setBlockCacheEnabled(true);
-			family.setBlocksize(1024*1024*2);
+			//family.setBlockCacheEnabled(true);
+			//family.setBlocksize(1024*1024*2);
 
-			family.setCompressionType(Compression.Algorithm.SNAPPY);
+			//family.setCompressionType(Compression.Algorithm.SNAPPY);
 
-			family.setMaxVersions(1);
-			family.setMinVersions(1);
+			//family.setMaxVersions(1);
+			//family.setMinVersions(1);
 
 			desc.addFamily(family);
 
 			//admin.createTable(desc);
 			byte[][] splitKeys = {
+
 					Bytes.toBytes("100"),
 					Bytes.toBytes("200"),
-					Bytes.toBytes("300")
+					Bytes.toBytes("300"),
+
+					Bytes.toBytes("400"),
+					Bytes.toBytes("500"),
+					Bytes.toBytes("600"),
+
+					Bytes.toBytes("700"),
+					Bytes.toBytes("800"),
+					Bytes.toBytes("900")
 			};
 			admin.createTable(desc,splitKeys);
 
