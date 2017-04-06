@@ -33,49 +33,49 @@ public class WordCountTopolopy {
 
     public static void main(String[] args) {
 
-        //´´½¨topology
+        //ï¿½ï¿½ï¿½ï¿½topology
         TopologyBuilder tb = new TopologyBuilder();
 
-        //Á¬½Ókafka
-        //´´½¨BrokerHostsÂ·¾¶
+        //ï¿½ï¿½ï¿½ï¿½kafka
+        //ï¿½ï¿½ï¿½ï¿½BrokerHostsÂ·ï¿½ï¿½
         BrokerHosts bh = new ZkHosts("hadoop1:2181/kafka");
         //ä¸»é¢˜
         String togicName = "yxdkafka0";
         String zkRoot = "/kafka";
-        //Éú³ÉÎ¨Ò»±àºÅ
+        //ï¿½ï¿½ï¿½ï¿½Î¨Ò»ï¿½ï¿½ï¿½
         String id = UUID.randomUUID().toString();
-        //´´½¨SpoutConfig
+        //ï¿½ï¿½ï¿½ï¿½SpoutConfig
         SpoutConfig sc = new SpoutConfig(bh,togicName,zkRoot,id);
 
-        //Ã¿´Î´Ó×î´óÏû·ÑÎ»ÖÃ¿ªÊ¼Ïû·Ñ
+        //Ã¿ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã¿ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
         sc.forceFromStart = false;
-        //½âÎöÄ£Ê½
+        //ï¿½ï¿½ï¿½ï¿½Ä£Ê½
         sc.scheme = new SchemeAsMultiScheme(new StringScheme());
 
 
-        //Á¬½Ófkaspout
+        //ï¿½ï¿½ï¿½ï¿½fkaspout
         KafkaSpout ks = new KafkaSpout(sc);
 
-        //topologyÉèÖÃKafkaSpout
+        //topologyï¿½ï¿½ï¿½ï¿½KafkaSpout
         tb.setSpout("wcspout",ks);
 
-        //ÉèÖÃÀ­È¡bolt
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡bolt
         tb.setBolt("wcSpiltbolt",new DeselfSplitBolt()).shuffleGrouping("wcspout");
 
-        // Êý¾ÝÁ÷·Ö×éµÄ3ÖÖ·½Ê½
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½3ï¿½Ö·ï¿½Ê½
 		/*
-		 * .shuffleGrouping(SPOUT_ID);  Ëæ»ú·Ö×é
-		 * .fieldsGrouping(componentId, fields);  °´£¨×Ö¶Î£©key·Ö×é
-		 * .globalGrouping(componentId);  È«¾Ö·Ö×é£¨Ö»·Öµ½Ò»×éÖÐ£©
+		 * .shuffleGrouping(SPOUT_ID);  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		 * .fieldsGrouping(componentId, fields);  ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶Î£ï¿½keyï¿½ï¿½ï¿½ï¿½
+		 * .globalGrouping(componentId);  È«ï¿½Ö·ï¿½ï¿½é£¨Ö»ï¿½Öµï¿½Ò»ï¿½ï¿½ï¿½Ð£ï¿½
 		 *
 		 */
 
-        //ÉèÖÃcountBolt
+        //ï¿½ï¿½ï¿½ï¿½countBolt
         tb.setBolt("countBolt", new DeselfCountBolt()).fieldsGrouping("wcSpiltbolt", new Fields("word"));
 
 
 
-        //´´½¨hbase
+        //ï¿½ï¿½ï¿½ï¿½hbase
         hbc.initNameSpace(nameSpace,create);
         System.out.println("========nameSpace created=======");
         hbc.initTable(first_storm_content, cf_storm);
@@ -107,7 +107,7 @@ public class WordCountTopolopy {
 
 
 
-        // ¼¯ÈºÄ£Ê½
+        // ï¿½ï¿½ÈºÄ£Ê½
         if (args != null && args.length > 0) {
             conf.setNumWorkers(3);
 
@@ -119,12 +119,9 @@ public class WordCountTopolopy {
                 e.printStackTrace();
             }
         }
-        else {      // ±¾µØÄ£Ê½
-           /*
-		 * ±¾µØ²âÊÔÄ£Ê½
-		 */
+        else {
             LocalCluster localCluster = new LocalCluster();
-            // arg0|topologyÃû×Ö, arg1|ÊÇÏòºó·¢ËÍµÄ²ÎÊý, arg2|topologyÊµÀý
+            // arg0|topologyï¿½ï¿½ï¿½ï¿½, arg1|ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÍµÄ²ï¿½ï¿½ï¿½, arg2|topologyÊµï¿½ï¿½
             localCluster.submitTopology("wcTopology",conf,tb.createTopology());
         }
 
